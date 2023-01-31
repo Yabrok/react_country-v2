@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
-import { Link, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
+
 
 export const CountryInfo = () => {
   const { name } = useParams()
@@ -41,14 +42,15 @@ export const CountryInfo = () => {
         }
       })
   }, [])
-  // console.log(info);
+
+  const navigate = useNavigate()
   return (
     <>
       {info.isLoading ? <h1>Loading...</h1> : ''}
       {info.isError ? <h1>{info.isError}</h1> : ''}
       {info.data.length ? (
         <div className="container pt-5">
-          <Link className="btn btn-secondary mb-5" to='/'>Back</Link>
+          <button onClick={() => navigate(-1)} className="btn btn-secondary mb-5">Back</button>
           {
             info.data?.map((info) => {
               return (
