@@ -1,13 +1,9 @@
-import { Header } from './components/Header'
-import { Home } from './pages/Home'
-import { CountryInfo } from "./pages/CountryInfo/CountryInfo";
-import './assets/style/index.css'
-import { Route, Routes } from "react-router-dom";
-
 import { useEffect, useState, useRef } from "react";
+import { Content } from '../../components/Content'
 
 
-function App() {
+
+export const Home = () => {
   const [countries, setCountries] = useState({
     isLoading: false,
     data: [],
@@ -132,16 +128,41 @@ function App() {
         })
     }
   }
+
   return (
-    <>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path='/info/:name' element={<CountryInfo />} />
-      </Routes>
-
-    </>
-  );
+    <div className="container">
+      <section className="hero py-5">
+        <div className="container">
+          <form onSubmit={handleChange} className="d-flex justify-content-between">
+            <div className="w-50 input-group">
+              <input ref={search} className='form-control' type="text" placeholder="Search country..." />
+              <button type="submit" className="btn btn-success">Search</button>
+            </div>
+            <select ref={select} onChange={handleSelect} className='form-select w-25'>
+              <option defaultValue value='all'>All</option>
+              <option value='Europe'>Europe</option>
+              <option value='Antarctic'>Antarctic</option>
+              <option value='Oceania'>Oceania</option>
+              <option value='Asia'>Asia</option>
+              <option value='Africa'>Africa</option>
+              <option value='Americas'>Americas</option>
+            </select>
+          </form>
+        </div>
+      </section>
+      {countries.isLoading ? <h1>Loading...</h1> : ''}
+      {countries.isError ? <h1>{countries.isError}</h1> : ''}
+      {countries.data.length ? (
+        <ul className="row gy-4 list-unstyled">
+          {
+            countries.data.map((item, index) => {
+              return (
+                <Content index={index} obj={item} />
+              )
+            })
+          }
+        </ul>
+      ) : ('')}
+    </div>
+  )
 }
-
-export default App;
